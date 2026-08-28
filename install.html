@@ -24,13 +24,9 @@
   var base = location.href.split('?')[0].replace(/\/[^\/]*$/, '');
   var handler = base + '/botao.html';
 
-  // Onde o botao deve aparecer. Se algum codigo nao existir no seu
-  // Bitrix24, ele simplesmente falha e os outros continuam.
+  // O botao aparece somente na barra do negocio.
   var locais = [
-    { code: 'CRM_DEAL_DETAIL_TOOLBAR',    nome: 'Barra do negocio' },
-    { code: 'CRM_LEAD_DETAIL_TOOLBAR',    nome: 'Barra do lead' },
-    { code: 'CRM_CONTACT_DETAIL_TOOLBAR', nome: 'Barra do contato' },
-    { code: 'CRM_COMPANY_DETAIL_TOOLBAR', nome: 'Barra da empresa' }
+    { code: 'CRM_DEAL_DETAIL_TOOLBAR', nome: 'Barra do negocio' }
   ];
 
   var log = document.getElementById('log');
