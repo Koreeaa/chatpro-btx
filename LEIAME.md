@@ -1,63 +1,43 @@
 # ChatPro dentro do Bitrix24
 
-Botao destacado na barra do negocio/lead/contato. O vendedor clica e o
-ChatPro abre no slider lateral do Bitrix24, em tela cheia.
+Aplicativo local estatico que exibe o painel do ChatPro dentro do
+Bitrix24 e registra o item **ChatPro** na barra do negocio. O vendedor
+clica ali e o ChatPro abre no slider lateral, em tela cheia.
 
-## 1. Editar
+Ja esta instalado no portal specologia.bitrix24.com.br (aplicativo
+local ID 78). Este repositorio guarda o codigo-fonte.
 
-Abra `config.js` e confirme a URL das conversas:
+## Arquivos
 
-    window.CHATPRO_URL = "https://app.chatpro.com.br/";
+- `index.html` — a pagina do app: iframe do ChatPro + registro do
+  item na barra do negocio (`placement.bind` em `CRM_DEAL_DETAIL_TOOLBAR`).
+- `config.js` — a unica coisa que voce edita: a URL do ChatPro.
+- `chatpro.zip` — os dois arquivos acima empacotados, pronto para subir.
 
-Se ao entrar no ChatPro a barra de endereco mostrar algo mais especifico
-(ex.: `.../chats`), use essa URL — o painel ja abre direto na lista.
+## Como publicar uma alteracao
 
-## 2. Hospedar
+1. Edite `config.js` e/ou `index.html`.
+2. Gere o zip com os dois na raiz:
 
-Suba os quatro arquivos (`index.html`, `botao.html`, `install.html`,
-`config.js`) juntos, na mesma pasta, em qualquer host com HTTPS:
-GitHub Pages, Netlify, Cloudflare Pages, Vercel ou seu proprio servidor.
+       zip -X chatpro.zip index.html config.js
 
-Anote as duas URLs que sairem, por exemplo:
+3. No Bitrix24: **Aplicativos -> Recursos para desenvolvedores ->
+   Integracoes**, abra o registro do aplicativo local, marque
+   **Estatico**, envie o novo `chatpro.zip` e clique em **Salvar**.
+4. Abra o app uma vez (Aplicativos -> ChatPro). Ele mesmo refaz o
+   registro do item na barra do negocio.
 
-    https://SEU-HOST/chatpro/index.html
-    https://SEU-HOST/chatpro/install.html
+## Observacoes
 
-## 3. Criar o aplicativo no Bitrix24
-
-Aplicativos -> Recursos para desenvolvedores -> Outro -> Aplicativo local.
-
-| Campo                          | Valor                                  |
-|--------------------------------|----------------------------------------|
-| Tipo                           | Estatico                               |
-| Seu caminho do manipulador     | .../index.html                         |
-| Caminho de instalacao inicial  | .../install.html                       |
-| Apenas script                  | desmarcado                             |
-| Texto do item de menu          | ChatPro                                |
-| Atribuir permissoes            | CRM (crm) + Incorporacoes (placement)  |
-
-Clique em Create. A tela de instalacao roda sozinha e mostra em quais
-lugares o botao foi registrado.
-
-## 4. Conferir
-
-Abra qualquer negocio: o botao verde "Abrir ChatPro" aparece na barra
-superior do card. Clicando, o ChatPro abre no slider.
-
-## Se der errado
-
-- **A instalacao acusa erro de permissao**: falta o escopo `placement`.
-  Edite o aplicativo, adicione e reinstale.
-- **A tela de instalacao nao consegue chamar a API** (modo Estatico sem
-  autenticacao): troque o tipo para Servidor e hospede em algo que
-  responda POST — Cloudflare Workers ou seu servidor. Os arquivos sao
-  os mesmos.
-- **O ChatPro pede login toda vez**: o navegador esta bloqueando cookies
-  de terceiros. Libere `chatpro.com.br` nas excecoes do Chrome.
-
-## Depois
-
-Da pra fazer o botao abrir direto a conversa do telefone daquele
-negocio, em vez da lista toda — depende de o ChatPro aceitar um numero
-na URL. Vale testar abrindo uma conversa la e olhando a barra de
-enderecos.
+- Permissoes necessarias no aplicativo: **CRM (crm)** e
+  **Aplicativo incorporado (placement)**.
+- Nao use GitHub Pages como manipulador: o Bitrix24 abre o handler
+  com POST e o Pages responde 405. Por isso o app roda em modo
+  Estatico, hospedado pelo proprio Bitrix24.
+- Arquivos com SVG inline foram entregues vazios pelo empacotador do
+  Bitrix24. Se um arquivo aparecer em branco no app, e isso — troque
+  por CSS ou texto.
+- Dentro do iframe o ChatPro comeca deslogado, porque o navegador
+  separa cookies de um site quando ele roda embutido em outro. Cada
+  pessoa faz login uma vez ali dentro. Se pedir senha toda vez, libere
+  `chatpro.com.br` nas excecoes de cookies do Chrome.

@@ -41,7 +41,29 @@
       }
     } catch (e) {}
   }
-  if (window.BX24 && BX24.init) { BX24.init(ajustar); }
+
+  // Registra o botao na barra do negocio. E idempotente: chamar de novo
+  // apenas atualiza o registro existente.
+  function registrarBotao() {
+    try {
+      var self = location.href.split('?')[0].split('#')[0];
+      // Limpa registros antigos deste app nesse local e registra o atual,
+      // para nunca aparecer o botao duplicado na barra do negocio.
+      BX24.callMethod('placement.unbind', {
+        PLACEMENT: 'CRM_DEAL_DETAIL_TOOLBAR'
+      }, function () {
+        BX24.callMethod('placement.bind', {
+          PLACEMENT: 'CRM_DEAL_DETAIL_TOOLBAR',
+          HANDLER:   self,
+          TITLE:     'ChatPro'
+        }, function () {});
+      });
+    } catch (e) {}
+  }
+
+  if (window.BX24 && BX24.init) {
+    BX24.init(function () { ajustar(); registrarBotao(); });
+  }
   window.addEventListener('resize', ajustar);
   setTimeout(ajustar, 1500);
 
