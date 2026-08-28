@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>ChatPro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://api.bitrix24.com/api/v1/"></script>
+<script src="config.js"></script>
+<style>
+  html, body { margin:0; padding:0; height:100%; overflow:hidden; background:#0e8a7d; }
+  #chatpro { border:0; display:block; width:100%; height:100%; }
+  #aviso {
+    position:absolute; inset:0; display:none; flex-direction:column; gap:12px;
+    align-items:center; justify-content:center; color:#fff; text-align:center; padding:24px;
+    font:15px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  #aviso a { color:#fff; }
+</style>
+</head>
+<body>
+
+<iframe id="chatpro" allow="clipboard-read; clipboard-write; microphone; camera; autoplay; fullscreen"></iframe>
+
+<div id="aviso">
+  <div>Nao foi possivel carregar o ChatPro aqui dentro.</div>
+  <a id="escape" href="#" target="_blank" rel="noopener">Abrir em uma nova aba</a>
+</div>
+
+<script>
+(function () {
+  var url = window.CHATPRO_URL;
+  var frame = document.getElementById('chatpro');
+  frame.src = url;
+  document.getElementById('escape').href = url;
+
+  function ajustar() {
+    try {
+      if (window.BX24) {
+        BX24.resizeWindow(document.documentElement.clientWidth, Math.max(window.innerHeight, 900));
+        BX24.fitWindow();
+      }
+    } catch (e) {}
+  }
+  if (window.BX24 && BX24.init) { BX24.init(ajustar); }
+  window.addEventListener('resize', ajustar);
+  setTimeout(ajustar, 1500);
+
+  var carregou = false;
+  frame.addEventListener('load', function () { carregou = true; });
+  setTimeout(function () {
+    if (!carregou) { document.getElementById('aviso').style.display = 'flex'; }
+  }, 12000);
+})();
+</script>
+
+</body>
+</html>

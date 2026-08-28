@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>ChatPro</title>
+<script src="https://api.bitrix24.com/api/v1/"></script>
+<style>
+  html, body { margin:0; padding:0; background:transparent; overflow:hidden;
+    font:14px/1 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    border:0; cursor:pointer; border-radius:20px;
+    padding:9px 18px 9px 14px;
+    background:#0e8a7d; color:#fff;
+    font-size:14px; font-weight:600; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(14,138,125,.35);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn:hover { background:#0b7a6e; box-shadow:0 4px 14px rgba(14,138,125,.45); transform:translateY(-1px); }
+  .btn:active { transform:translateY(0); }
+  .btn svg { width:18px; height:18px; flex:none; }
+  .pulso { position:relative; }
+  .pulso::after {
+    content:""; position:absolute; inset:-3px; border-radius:24px;
+    border:2px solid #0e8a7d; opacity:.6; animation:p 2.2s ease-out infinite;
+  }
+  @keyframes p { 0%{transform:scale(.98);opacity:.55} 70%{transform:scale(1.12);opacity:0} 100%{opacity:0} }
+</style>
+</head>
+<body>
+
+<span class="pulso">
+  <button class="btn" id="abrir">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2Zm5.8 14.13c-.25.69-1.44 1.32-1.98 1.37-.53.05-1.02.24-3.45-.72-2.9-1.15-4.75-4.1-4.9-4.29-.14-.19-1.17-1.56-1.17-2.98s.74-2.11 1-2.4c.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.25.6.85 2.07.92 2.22.08.15.13.32.02.51-.1.19-.16.31-.31.48-.15.17-.32.38-.46.51-.15.15-.31.31-.13.61.18.29.79 1.3 1.69 2.11 1.16 1.03 2.14 1.35 2.44 1.5.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.71.81 2.01.95.29.15.49.22.56.34.07.12.07.7-.18 1.39Z"/>
+    </svg>
+    Abrir ChatPro
+  </button>
+</span>
+
+<script>
+(function () {
+  function ajustar() {
+    try { if (window.BX24) { BX24.resizeWindow(200, 48); } } catch (e) {}
+  }
+  if (window.BX24 && BX24.init) { BX24.init(ajustar); } else { ajustar(); }
+
+  document.getElementById('abrir').addEventListener('click', function () {
+    try {
+      // Abre o app (index.html) no slider lateral do Bitrix24.
+      BX24.openApplication({}, function () {});
+    } catch (e) {
+      window.open(window.CHATPRO_URL || 'https://app.chatpro.com.br/', '_blank');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
